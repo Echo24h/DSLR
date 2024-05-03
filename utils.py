@@ -24,7 +24,7 @@ def load_csv(file_path: str) -> pd.DataFrame:
 
         data = pd.read_csv(file_path)
 
-        print("Loading dataset of dimensions " + str(data.shape))
+        # print("Loading dataset of dimensions " + str(data.shape))
 
         if data is None:
             raise AssertionError("Failed to load CSV.")
