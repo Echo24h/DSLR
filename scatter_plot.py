@@ -1,30 +1,36 @@
-import pandas as pd
+import utils
 import matplotlib.pyplot as plt
-from utils import load_csv
+import pandas as pd
 
 
-def ft_scatter_plot(data: pd.DataFrame) -> None:
+def scatter_plot_single(feature1: str, feature2: str, data: pd.DataFrame) -> None:
     """
-    Generate a scatter plot of the data.
+    Generate a scatter plot of the data for comparison between two features.
     
     Args:
+        feature1 (str): The first feature to compare.
+        feature2 (str): The second feature to compare.
         data (pd.DataFrame): The DataFrame containing the data.
     """
-    fig, axs = plt.subplots(4, 4, figsize=(20, 20))
-    for i, column1 in enumerate(data.columns):
-        for j, column2 in enumerate(data.columns):
-            if i != j:
-                values1 = [x for x in data[column1].values if not pd.isnull(x)]
-                values2 = [x for x in data[column2].values if not pd.isnull(x)]
-                if all(isinstance(x, (int, float)) for x in values1) and all(isinstance(x, (int, float)) for x in values2):
-                    axs[i, j].scatter(values1, values2, alpha=0.5)
-                    axs[i, j].set_title(f"{column1} vs {column2}")
-                    axs[i, j].set_xlabel(column1)
-                    axs[i, j].set_ylabel(column2)
-    plt.subplots_adjust(hspace=0.7)
+    houses = data['Hogwarts House'].unique()
+    houses_color = {
+        'Gryffindor': 'red',
+        'Hufflepuff': 'yellow',
+        'Ravenclaw': 'blue',
+        'Slytherin': 'green'
+    }
+    plt.figure(figsize=(7, 7))
+    for house in houses:
+        house_data = data[data['Hogwarts House'] == house]
+        plt.scatter(house_data[feature1], house_data[feature2], color=houses_color[house], alpha=0.7)
+
+    plt.legend(houses, loc='upper right', frameon=False, title='Hogwarts Houses', title_fontsize='large')
+    plt.title(f'Scatter plot of {feature1} vs {feature2}')
+    plt.xlabel(feature1)
+    plt.ylabel(feature2)
     plt.show()
 
 
-if __name__ == "__main__":
-    data = load_csv("datasets/dataset_train.csv")
-    ft_scatter_plot(data)
+if __name__ == '__main__':
+    data = utils.load_csv('data/dataset_train.csv')
+    scatter_plot_single('Defense Against the Dark Arts', 'Astronomy', data)

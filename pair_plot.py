@@ -1,32 +1,45 @@
-import pandas as pd
+import utils
 import matplotlib.pyplot as plt
-from utils import load_csv
-import numpy as np
+import seaborn as sns
+# import plotly as px
+import pandas as pd
 
 
-def ft_pair_plot(data: pd.DataFrame) -> None:
+def pair_plot(data: pd.DataFrame) -> None:
     """
     Generate a pair plot of the data.
     
     Args:
         data (pd.DataFrame): The DataFrame containing the data.
     """
-    # Création d'un pair plot (scatter plot matrix)
-    fig, axs = plt.subplots(8, 8, figsize=(10, 10))
-    for i, column1 in enumerate(data.columns):
-        for j, column2 in enumerate(data.columns):
-            if i != j:
-                values1 = [x for x in data[column1].values if not pd.isnull(x)]
-                values2 = [x for x in data[column2].values if not pd.isnull(x)]
-                if all(isinstance(x, (int, float)) for x in values1) and all(isinstance(x, (int, float)) for x in values2):
-                    axs[i, j].scatter(values1, values2, alpha=0.5)
-                    axs[i, j].set_title(f"{column1} vs {column2}")
-                    axs[i, j].set_xlabel(column1)
-                    axs[i, j].set_ylabel(column2)
 
-    plt.tight_layout()
+
+    grouped = data.groupby('Hogwarts House')
+
+
+    gryffindor = grouped.get_group('Gryffindor')
+    hufflepuff = grouped.get_group('Hufflepuff')
+    ravenclaw = grouped.get_group('Ravenclaw')
+    slytherin = grouped.get_group('Slytherin')
+
+    colors = ['cyan', 'purple', 'blue', 'green']
+
+    features = gryffindor.columns[6:]
+
+    columns = list(features) + ['Hogwarts House']
+    plt.rcParams['axes.labelsize'] = 7
+
+    plot = sns.pairplot(data[columns], hue='Hogwarts House', height=0.8, plot_kws={'s': 7})
+    plot._legend.set_title('Hogwarts House')
+    for label in plot._legend.texts:
+        label.set_fontsize(7)
+    plot._legend.get_title().set_fontsize(7)
+    # plt.title('Pair plot of Hogwarts Houses Marks')
     plt.show()
 
+
 if __name__ == "__main__":
-    data = load_csv("datasets/dataset_train.csv")
-    ft_pair_plot(data)
+    data = utils.load_csv('data/dataset_train.csv')
+    pair_plot(data)
+
+
