@@ -1,5 +1,7 @@
 # DataScience x Logistic Regression Project
 
+This project was completed as a group with [hvincent42](https://github.com/hvincent42).
+
 ## Objective
 This project focuses on exploring basic concepts in Data Science with an emphasis on Logistic Regression for classification problems. It will guide you through key steps in data exploration, cleaning, visualization, and model training. The goal is to implement a logistic regression model to solve a classification problem and develop a toolkit for Machine Learning tasks.
 
